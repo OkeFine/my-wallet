@@ -1,6 +1,9 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useContext } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router";
+import { authUser } from "../utils/services";
+import { useMutation } from "react-query";
+import { StoreContext } from "../StoreContext";
 import { Container, TextField, Button } from "../components";
 import bgUnlock from "../assets/bg-unlock.svg";
 import logo from "../assets/logo.svg";
@@ -37,11 +40,23 @@ const Slogan = styled.p`
 
 export default function Unlock() {
   const [pass, setPass] = useState("");
+  const [error, setError] = useState<any>(null);
+  const [, dispatch] = useContext(StoreContext);
   const history = useHistory();
+
+  const { mutate, isLoading } = useMutation(authUser, {
+    onSuccess: (data) => {
+      dispatch({ type: "LOGIN", payload: data });
+      history.push("/");
+    },
+    onError: (err) => {
+      setError(err);
+    },
+  });
 
   const handleUnlock = (e: any) => {
     e.preventDefault();
-    history.push("/");
+    mutate({ email: "user@gmail.com", password: pass });
   };
 
   return (
@@ -60,9 +75,14 @@ export default function Unlock() {
               setPass((e.target as HTMLInputElement).value);
             },
           }}
+          errorMsg={error?.response.data.message}
           label="Enter Password"
         />
-        <Button width="88px">Unlock</Button>
+        {isLoading ? (
+          <span>Sign in...</span>
+        ) : (
+          <Button width="88px">Unlock</Button>
+        )}
       </FormArea>
     </Container>
   );

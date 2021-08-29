@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import bgMain from "../assets/bg-main.svg";
@@ -8,7 +9,15 @@ import depositIcon from "../assets/deposit-icon.svg";
 import sendIcon from "../assets/send-icon.svg";
 import swapIcon from "../assets/swap-icon.svg";
 import { Container, Asset } from "../components";
-import CURRENCIES, { format } from "../utils/currencyHelpers";
+import {
+  format,
+  convertCurrency,
+  assetSupport,
+  mainCurrency,
+  localCurrency,
+} from "../utils/currencyHelpers";
+import { shortenAddress } from "../utils/walletHelpers";
+import { StoreContext } from "../StoreContext";
 
 const PatternBg = styled.div`
   width: 100%;
@@ -155,6 +164,8 @@ const AssetItem = styled.div`
 `;
 
 export default function Main() {
+  const [state] = useContext(StoreContext);
+  const { wallet, assets } = state.user;
   const history = useHistory();
   return (
     <Container>
@@ -172,7 +183,7 @@ export default function Main() {
         <WalletAddress>
           <WalletInfo>
             <span>My Wallet</span>
-            <Address>(7300 3777 3888 3334)</Address>
+            <Address>{shortenAddress(wallet)}</Address>
           </WalletInfo>
           <CopyBtn>
             <img src={copyIcon} alt="Copy Address" />
@@ -180,10 +191,11 @@ export default function Main() {
         </WalletAddress>
         <TotalAmount>
           <h1>
-            {format(100000)} {CURRENCIES.USD.id}
+            {format(assets[mainCurrency])} {mainCurrency}
           </h1>
           <h3>
-            {format(2308900000)} {CURRENCIES.VND.id}{" "}
+            {format(convertCurrency(mainCurrency, assets[mainCurrency]))}{" "}
+            {localCurrency}
           </h3>
         </TotalAmount>
         <TransparentLogo>
@@ -212,22 +224,23 @@ export default function Main() {
       </ActionBar>
       <div>
         <AssetLabel>Assets</AssetLabel>
-        <AssetItem>
-          <Asset
-            amount={50}
-            currency="EUR"
-            convert={1531872}
-            convertCurrency="VND"
-          />
-        </AssetItem>
-        <AssetItem>
-          <Asset
-            amount={1000}
-            currency="YEN"
-            convert={2103317}
-            convertCurrency="VND"
-          />
-        </AssetItem>
+        {assetSupport
+          .filter((assetId) => assetId !== mainCurrency)
+          .map((assetId: any) => {
+            if (!assets[assetId]) {
+              return null;
+            }
+            return (
+              <AssetItem key={assetId}>
+                <Asset
+                  amount={assets[assetId]}
+                  currency={assetId}
+                  convert={convertCurrency(assetId, assets[assetId])}
+                  convertCurrency={localCurrency}
+                />
+              </AssetItem>
+            );
+          })}
       </div>
     </Container>
   );

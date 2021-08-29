@@ -1,13 +1,21 @@
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import StoreProvider from "./StoreContext";
 import Routes from "./Routes";
-// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-// import { Main, Send, SignIn } from "./views";
 import "./App.css";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div id="RoninWallet">
-      <Routes />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <StoreProvider>
+        <div id="RoninWallet">
+          <Routes />
+        </div>
+      </StoreProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 

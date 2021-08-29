@@ -75,6 +75,14 @@ const FillBtn = styled.button`
   top: 30px;
 `;
 
+const ErrorText = styled.span`
+  color: red;
+  font-size: 10px;
+  position: absolute;
+  left: 0;
+  bottom: -15px;
+`;
+
 type TProps = {
   label: string;
   children?: ReactNode;
@@ -82,12 +90,15 @@ type TProps = {
   fillBtnText?: string;
   onClickFillBtn?: (e: FormEvent<HTMLButtonElement>) => void;
   icon?: string;
+  errorMsg?: string;
   inputProps: {
     name?: string;
     type?: string;
     disabled?: boolean;
     onChange?: (e: FormEvent<HTMLInputElement>) => void;
     value?: any;
+    min?: string | number;
+    max?: string | number;
   };
 };
 
@@ -97,6 +108,7 @@ export default function TextField({
   children,
   inputProps,
   fillBtnText,
+  errorMsg,
   onClickFillBtn,
 }: TProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -125,6 +137,7 @@ export default function TextField({
         </ViewPass>
       ) : null}
       <SInput ref={inputRef} {...inputProps} />
+      {errorMsg ? <ErrorText>{errorMsg}</ErrorText> : null}
     </TextfieldWrapper>
   );
 }

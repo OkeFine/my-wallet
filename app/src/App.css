@@ -2,6 +2,10 @@
   font-family: system-ui, sans-serif;
   font-size: 12px;
   color: #151a30;
+  height: 600px;
+  max-width: 500px;
+  position: relative;
+  margin: auto;
 }
 
 button {

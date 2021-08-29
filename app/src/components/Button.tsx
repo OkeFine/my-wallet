@@ -10,18 +10,22 @@ const SButton = styled.button<{
   background: ${(props) =>
     props.secondary
       ? "#F7F9FC"
+      : props.disabled
+      ? "#cccc"
       : "linear-gradient(256.28deg, #1c94f4 0%, #1273ea 100%)"};
   border-radius: 8px;
   font-weight: 600;
   font-size: 14px;
   line-height: 20px;
-  color: ${(props) => (props.secondary ? "#1273EA" : "#ffffff")}; ;
+  color: ${(props) => (props.secondary ? "#1273EA" : "#ffffff")};
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
 type TProps = {
   children: ReactNode;
   width?: string;
   secondary?: boolean;
+  disabled?: boolean;
   onClick?: (e: FormEvent<HTMLButtonElement>) => void;
 };
 

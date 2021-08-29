@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const verifyToken = require('./auth.middleware')
@@ -7,6 +8,13 @@ const dotenv = require('dotenv')
 const { errorHanlder, _Error } = require('./error.helpers')
 
 const app = express()
+
+const corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
 app.use(express.urlencoded())
 app.use(express.json())
 dotenv.config()
@@ -38,7 +46,7 @@ app.post('/auth', function (req, res, next) {
         return res.json({ user, token })
       }
     }
-    throw new _Error(401, 'Email or password is incorrect')
+    throw new _Error(401, 'Unlock info incorrect')
   } catch(err) {
     next(err)
   }
