@@ -1,5 +1,17 @@
 # Ronin Wallet - FE Challenge
 
+## Backend End
+
+- Build by Nodejs / Expressjs
+- How to run:
+
+```
+cd /server
+cp .env.sample .env
+yarn install
+yarn start
+```
+
 ## Front End
 
 - Build by Create React App
@@ -12,17 +24,9 @@ yarn install
 yarn start
 ```
 
-## Backend End
+- password: `123456`
 
-- Build by Nodejs / Expressjs
-- How to run:
-
-```
-cd /server
-cp .env.sample .env
-yarn install
-yarn start
-```
+---
 
 ![Alt Text](https://media.giphy.com/media/VjWhqthLwoDP3T1Ue8/giphy.gif)
 
